@@ -1,0 +1,202 @@
+PELAJARI CARA MEMBUAT APLIKASI WEB MENGGUNAKAN Node.js dan Express.
+
+*Memasang Express
+    Di dalam Node.Js, terdapat banyak peralatan yang bisa
+    dimanfaatkan, alat yang dimaksud adalah package (paket).
+    express adalah salah satu nama paketnya.
+
+*npm
+    Terdapat sistem bernama npm (Node Packaging Manager) 
+    yang memperbolehkan Anda mengatur penggunaan paket. 
+    Dengan npm, Anda dapat membagikan dan mengunduh paket. 
+    Kita menggunakannya untuk memasang-masang paket pada 
+    aplikasi yang akan kita kerjakan.
+
+*Memasang Express Menggunakan npm 
+    Mari gunakan npm install sebagai command untuk mengunduh 
+    paket dan memasangnya pada aplikasi kita.
+    syntax:  $npm install express //terminal
+
+*Menggunakan Express
+    Untuk menggunakan express pada aplikasi kita, Anda harus 
+    melakukan import paket dan menambahkan beberapa baris code 
+    untuk memulainya, seperti pada gambar di bawah ini.
+    gunakan pada file yang di gunakan untuk server disini menggunakan
+    nama app.Js
+    syntax:
+    const express = require('express');     //impor express
+    const app = express();                  //inisialisasi express
+
+*Menjalankan server
+
+    - Method Listen 
+        Untuk menjalankan server, kita harus menambahkan method 
+        listen dalam app.js, lalu menjalankannya pada terminal 
+        menggunakan command berikut: node nama_file.js
+        syntax:
+
+        app.listen(30000); //app.js
+
+        $node app.js //terminal
+
+ *Menampilkan Halaman
+    - Routing
+        Gambar di kiri menampilkan code untuk menangani setiap 
+        command yang dikirimkan ke /top. Menentukan cara aplikasi
+        menanggapi permintaan ke URL tertentu disebut routing.
+        syntax:
+
+        app.get('/top,()=>{       //top untuk setiap permintaan ke URL/top
+            /*beberapa baris kode*/     //kode untuk menampilkan halaman top
+        });
+
+    - req dan res
+        Setiap route menangani permintaan (request) dan tanggapan (response) 
+        dengan function, ini disebut Route Handler dan memiliki req 
+        (singkatan dari request ) dan res (singkatan dari response) 
+        sebagai parameter. Dua parameter ini akan menyimpan informasi
+         menganai request dan response.
+         syntax:
+
+        app.get('/top,(req,res)=>{       //top untuk setiap permintaan ke URL/top
+            /*beberapa baris kode*/     //kode untuk menampilkan halaman top
+        });
+    
+    -Membuat view untuk halaman beranda
+        Untuk file-file berkenaan dengan view (berisi template HTML,disebut juga file view),
+         kita gunakan tipe file EJS yang akan ditempatkan di folder bernama views. Kita akan 
+         perjelas EJS pada pelajaran mendatang, Untuk sekarang, anggap saja itu sebagai HTML dulu.
+         Anda dapat menentukan file view mana yang akan ditampilkan di browser menggunakan function res.render.
+         syntax:
+        app.get('/top,(req,res)=>{       //top untuk setiap permintaan ke URL/top
+            res.render(top.ejs)   //kode untuk menampilkan halaman top
+        });
+
+*Menerapkan CSS
+    -MENERAPKAN CSS(1)
+        Dengan express, Anda harus menentukan dimana akan menempatkan file CSS dan file gambar.
+        Kali ini, kita akan meletakkannya pada folder bernama public.
+        tambah folder public di file utama 
+        syntax:
+        app.use(express.static('public')); //public spesifikasikan diaman file css dan gambar diletakan
+
+    -Menerapkan CSS (2)
+        Kita akan menambahkan file CSS ke folder public. Untuk memuat CSS, kita harus menentukan path
+        (jalur file) CSS yang ingin kita hubungkan dengan folder public.
+        list-app=>public=>css=>style.css      
+        syntax:
+        <link rel ="stylesheet" href="/css/style.css">
+
+    -Menggunakan gambar
+        Gambar dapat dimuat dengan cara yang sama seperti memuat file CSS.
+        public=>images=>top.png
+        syntax:
+        <img src="/images/top.png">
+
+*Membuat Halaman Daftar Belanjaan
+    - Menampilkan Halaman Daftar
+        Kita akan menambahkan beberapa code untuk menampilkan halaman 
+        Daftar Belanjaan saat mendapatkan akses ke localhost:3000/index.
+        syntax:
+        app.get('/index,(req,res)=>{       //top untuk setiap permintaan ke URL/top
+            res.render(index.ejs)   //kode untuk menampilkan halaman top
+        });
+
+*Menggunakan EJS untuk Menampilkan Nilai
+    - EJS 
+        $npm install ejs
+    
+    -Menggunakan JavaScript
+        Untuk menyematkan code JavaScript, kita dapat menggunakan <% %> atau <%= %>. Tanda <% %>
+        digunakan pada kasus seperti menetapkan variable yang nantinya tidak tertampilkan. Sebaliknya,
+        <%= %> digunakan pada kasus ingin mencetak variable yang akan ditampilkan.
+        syntax:
+
+        nilai tidak ditampilkan
+        <% const item ={id:3, name:'bawang'}%>
+        <p>id : <%item.id%></p>
+        <p>nama : <%item.name%></p>
+
+        nilai ditampilkan
+        <% const item ={id:3, name:'bawang'}%>
+        <p>id : <%=item.id%></p>
+        <p>nama : <%=item.name%></p>
+
+*Menggunakan Array Pada view
+    - Keuntungan EJS
+        Dengan EJS, Anda dapat menggunakan method forEach yang akan membuat code lebih sederhana 
+        dan lebih mudah dikelola daripada HTML biasa.
+        contoh: 
+        menggunakan HTML
+        <li>
+            <span>1</span>
+            <span>kentang</span>
+        </li>
+        <li>
+            <span>2</span>
+            <span>wortel</span>
+        </li>
+
+        menggunakan EJS
+        <%items.forEach((item)=>{ %>
+            <li>
+                <span><%=item.id%></span>
+                <span><%=item,name%></span>
+            </li>
+        <% }); %>
+
+        //dapat menangani banyak item hanya dengan code ini
+
+    -Meninjau Ulang forEach 
+        Untuk menampilkan element dari sebuah array, kita akan menggunakan method
+        forEach yang kita telah pelajari pada JavaScript Study Ⅵ.
+        syntax:
+        array = [element1,element2,element3];
+                    ||        ||        ||
+                    param     param     param
+        array.forEach((param)=> {code});
+
+
+    -Menampilkan Array dari Object 
+        Mari ganti code HTML untuk daftar item menggunakan EJS. Kita akan menentukan sebuah array
+        untuk mengelola item, lalu tampilkan element tersebut pada halaman Daftar Belanjaan. 
+        Karena kita tidak ingin menampilkan method forEach itu sendiri, kita akan menggunakan 
+        <% %>, bukan <%= %>.
+        syntax:
+
+        <%const items =[
+            {id:1,name:'kentang'},
+            {id:2,name:'wortel'},
+            {id:3,name:'bawang'},
+        ];%>
+
+        <ul>
+        <%items.forEach((item)=>{%>
+            <li>
+                <span><%=item.id%></span>
+                <span><%=item.name%></span>
+            </li>
+        <%})%>
+        <ul>
+
+Menambahkan Tautan Diantara Halaman
+    - Mengganti URL Halaman top
+        URL untuk ke halaman top adalah /top, tapi mari kita ganti ke /. URL ini disebut URL root .
+        Lumrah sekali mengatur halaman pertama yang dikunjungi pengguna sebagai URL root.
+
+    - Menambahkan Tautan(1)
+        Mari kita tambahkan tautan menuju halaman daftar belanjaan pada tombol yang ada di halaman top.
+        syntax:
+        <div class="top-detail">
+            <a href="/index">
+                Lihat daftar
+            </a>
+        </div>
+
+    -Menambahkan Tautan (2)
+        Kita juga akan menambahkan tautan menuju halaman top pada tombol ada di halaman daftar belanjaan.
+        <header>
+            <a href="/" class="header-logo">
+                LIST
+            </a>
+        <header>

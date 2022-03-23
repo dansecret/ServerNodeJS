@@ -1,0 +1,50 @@
+*Menggunakan Data base
+    
+Dalam pelajaran ini, kita akan menggunakan database untuk menambahkan
+fitur berikut ke aplikasi.
+
+*Menyiapkan database
+    -MYSQL
+        Ada bermacam-macam alat-alat pengelola database. Disini, kita akan
+        menggunakan yang bernama MySQL. Normalnya, Anda memasang MySQL-nya
+        secara terpisah, tetapi hal itu sudah dipersiapkan khusus untuk Anda
+        dalam environment (lingkungan) Progate.
+
+    -Menggunakan MySQL
+        Untuk menggunakan MySQL dengan Node.js, Anda harus menyambungkan mereka. 
+        Pada slide berikutnya, kita akan pelajari cara melakukannya.
+
+    -Memasang paket mysql pada npm/express
+        Untuk menghubungkan MySQL ke Node.js, Anda perlu menggunakan paket bernama mysql. 
+        Ini sama dengan ketika kita memasang sebuah paket saat pengaturan express pada Study I.
+        syntax:
+        pada terminal:
+        $npm install mysql
+    
+    -menghubungkan ke mysql 
+        Kita lakukan import paket mysql-nya, barulah kemudian menggunakan method createConnection.
+        Kita akan menyimpan informasi yang diperlukan dalam sebuah constant bernama connection.
+        Dengan ini, selesailah proses menghubungkan MySQL. Syntax yang ini bukan hal penting 
+        untuk diingat.
+
+*Menggunakan database
+    - algoritma 
+        localhost:3000/index => nodejs/server => menjalankan query ke database => database mengirim ke server 
+        => server mengirim dan menampilkan pada client
+
+    -  Cara Menjalankan query
+        Untuk menjalankan query ke database dari Node.js, Anda dapat menulis connection.query(A, B),
+        dimana A adalah query-nya dan B adalah sebuah function yang berjalan setelah query tersebut diselesaikan
+        (disebut juga callback).
+        contoh:
+        syntax:
+            const connection = mysql.createConnection(......);
+
+            connection.query(
+                'SELECT*FROM items',
+                ()=>{
+                    //tampilkan halaman daftar belanjaan( ini dijalankan setelah querynya selesai)
+                }
+            );
+
+    - callback query 
