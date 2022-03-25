@@ -48,3 +48,138 @@ fitur berikut ke aplikasi.
             );
 
     - callback query 
+        Callback query dapat berisi dua rgument. yang pertama, eror berisikan
+        informasi error ketika gagal query, lalu yang kedua, result 
+        berisikan hasil query ( dalam hal ini, informasi item daftar belanjaan)
+        
+        syntax :
+        connection.query(
+            'SELECT*FROM items',
+            (error,result)=>{
+                console.log(result);
+                res.render('index.ejs');
+            }
+        );
+
+*Menampilkan Nilai yang Di pilih
+    -Meneruskan Nilai ke ejs
+        Dengan EJS, anda dapat mengakses nilai melalui method render. Dengan menulis
+        {property: nilai} pada argumen ke -2 dari method render,Anda dapat
+        meneruskan nilai ke sisi EJS, Di sni kita akan menggunakan nilai yang didapatkan dari database
+        syntax menjadi:
+        pada index.ejs hapus bagian 
+                <% const items = [
+            {id:1,name:'kentang'},
+            {id:2,name:'wortel'},
+            {id:3,name:'bawang'}
+        ];%>
+
+        lalu meneruskan niali ke ejs 
+        syntax menjadi:
+                connection.query(
+            'SELECT*FROM items',
+            (error,result)=>{
+                console.log(result);
+                res.render('index.ejs',{items :results});
+            }
+        );
+
+*Fitur Penambah Item
+    -Menampilkan Halaman penambah item
+        Pertama,kita kaan menampilkan halaman penambahan item persis seperti
+        yang sudah kita lakukan pada halaman top daftar belanjaan. kita membuat halaman ini agar di akses melalu //new
+    -Tautan ke Halamn penambahan item
+        Mari kita tambahkan tautan pada halaman daftar Belanjaan yang mengarah pada halaman penambahan item yang baru saja kita berikutnya
+        syntax : index.ejs
+                <a href="/new" class="......">+ Tambahkan </a>
+                
+                app.js
+                app.get('/new',(req,res)=>{
+                    res.render('new.ejs');
+                });
+
+*Memproses Fitur Penambahan Item
+    - Menyiapkan Route untuk penambahan item
+        Kita akan menambahkan route untuk penambahan item terbaru, hingga kini, kita
+        menggunaakn app.get, namun kali ini kita akan gunakan app.post, method ini disebut GET dan post
+        ,tergantung pada kenis request(permintaan). kita pelajari detailnya pada slide berikutnya.
+
+        syntax:
+        app.post('/create',(req,res)=>{
+            connection.query(
+                'INSERT INTO items (names) VALUES (?)',
+                [req.body.itemName],(error,results)=>{
+                    console.log(results);
+                    res.redirect('index.ejs')
+                }
+            )
+        })
+
+    -Apa itu GET dan POST?
+        Saat anda melakukan sebuah request ke server, terdapat aturan dalam merincikan jenis proses yang anda minta.
+        sebagaimana ditampilkan di bwah ini, anda dapat melihat jenis proses apa yangdi
+        di tentukan GET dan POST
+        Gunakan GET untuk menampilkan halaman
+        GET = Localhost:3000 -> Node.js -> Tampilkan daftar 
+        Gunakan POST untuk memperbarui database
+        POST = Tambahkan (buton) -> Node .js -> Perbarui database
+
+    -Menyiapkan Formulir 
+        Untuk pembuatan formulir, kita akan gunakan tag HTML <form>. Berdasarkan penetuan route
+        ,kita akan atur attributr action menjadi berisi URL tujuan lalu attributr method berisi post atau get
+        syntax:
+        new.ejs
+        <Form action="/create" method="post">
+        <input type="text">
+        <input type="submit" value="tambahkan">
+        </form>
+
+        app.js
+        app.post('/create',(req, res)=>{
+            .....
+        })
+    
+    - MenampilkanDaftar Belanjaan 
+        Mari kita tulis code untuk menampilkan daftar belanjaan.kita akan gunakan code yang sama
+        seperti yang ada di /index untuk menampilkannya.
+
+        syntax:
+        app.js
+        app.post('/create',(req, res)=>{
+        connection.query(
+            'SELECT*FROM items',(error, results)=>{
+                res.render('index.ejs',{items: results});
+            }
+        );
+        });
+*Mendapatkan Nilai Input formulir
+    - Mendapatkan Nilai input (1)
+        Dengan mengatur atributr name dari elemnt input, Anda dapat mengirim informasi Formulir
+        berbentuk object ke server. Llalu pada sisi server,Anda dapat mendapatkan nilai dari formulir
+        menggunakan req.body.nilaiName.
+        Localhost:3000/new.ejs input=tomat => mengirim ke node.js(server).
+
+        Untuk mendapatkan nilai dari formulir, Anda harus menambahkan source code seperti contoh di bawha ini ke app.js
+        syntax:
+        //diperlukan konfigurasi unutk mengakses nilai nilai formulir
+        app.user(express.urlencoded({extended:false}));
+
+        //mendapatkan nilai-nilai formulir
+        console.log(req.body.itemName);
+
+*Menambahkan nilai input ke database
+    -Menambahkan Data
+        Kita bisa menggunakan method query seperti yang kita lakukan dengan SELECT untuk
+        menjalankan INSERT id dari tabel items di atur menjadi AUTO INCREMENT,sehingga kita tidak
+        harus khawatir dengan pengaturan id.
+        syntax:
+        app.js
+        app.post('/create', (req,res)=>{     //element di arrat akan masuk ke ?
+            connection.query(                     |
+                'INSERT INTO items (name) VALUES (?)', //column id sudah di atur menjadid AUTO INCREMENT sehingga tidak perlu dirincikan
+                (error, results)=>{
+                                            //-> dijalankan setelah query selesai
+                }
+            )
+        })
+

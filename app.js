@@ -21,7 +21,7 @@ app.get('/',(req, res)=>{
   res.render('top.ejs');
 });
 
-//routing file index.ejs
+//routing file index.ejs to sql
 app.get('/index', (req, res) => {
   connection.query(
     'SELECT * FROM items',
@@ -36,16 +36,46 @@ app.get('/new',(re, res)=>{
   res.render('new.ejs');
 });
 
+// Routing untuk penambahan item
+// app.post('/create', (req, res) => {
+//   connection.query(
+//     'INSERT INTO items (name) VALUES (?)',
+//     [req.body.itemName],
+//     (error, results) => {
+//       res.redirect('/index');
+//     }
+//   );
+// });
 
-app.post('/create', (req, res) => {
+//routing untuk penambahan item 
+app.post('/create',(req,res)=>{
   connection.query(
-    'INSERT INTO items (name) VALUES (?)',
-    [req.body.itemName],
-    (error, results) => {
-      res.redirect('/index');
+    'SELECT* FROM items',
+    (error, results)=>{
+      res.render('index.ejs',(items : results));
     }
   );
 });
 
+//Mendapatkan nilai Input Formulir
+app.post('create',(req ,res)=>{
+  comsole.log(req.body.itemName)
+})
+
+//menambahkan Item ke Database
+app.post('/create',(req,res)=>{
+connection.query(
+'INSERT INTO items (name) VALUES (?)',
+[req.body.itemName],
+(error,results)=>{
+  connection.query(
+    'SELECT* FROM items',
+    (error,results)=>{
+      res.render('index.ejs',{items: results});
+      }
+    );
+    }
+  );
+});
 //Menyambungkan server menggunakan method listen
 app.listen(3000);
