@@ -183,3 +183,48 @@ fitur berikut ke aplikasi.
             )
         })
 
+
+*maslaah saat ini adalah Setiap kali kita Reload halaman request(permintaan) sebelumnya akan dijalankan kembali dan item yang sama akan di tambahkan
+    -Menggunakan Redirect(pengalihan)
+     apa itu Redirect? 
+     Server dapat menghasilkan respons yang berbunyi "berikutnya, buat permintaan ke URL ini."
+     saat browser menerima pesan ini, browser akana secara otomatis membuat request ke URL yang
+     ditentukan. proses membuat reques lain ke URL yang berbeda ini di sebut redirect.
+
+     -Melakukan reload setelah Proses Redirect
+        Dengan menggunakan redirect, kita daapt melakukan request pada /index setelah item di buat dan halaman daftar belanjaan tetampilkan. Dengan begitu
+        ,Melakukan reload setelah pembuatan sebuah item belanjaan tidak akan mengulangi proses pembuatna item tersebut,
+        sehingga item tidak terus menerus tertambahkan.
+
+        localhost:3000/index (refresh) => node.js=>/create=>/index=>localhost:3000/index
+    - Cara menggunakan Redirect 
+        Setelah menambahkan item pada daftar belanjaan,mari redirect ke halaman daftar Belanjaan (/index).
+        Untuk melakukan redirect,gunakan method res.redirect dan URL sebagai argumen.
+        Sytax:
+        app.js
+        app.post('/create',(req,res)=>{
+            connection.query(
+                'INSERT INTO items(name) VALUES (?)',
+                [req.body.itemName],
+                (error,results)=>{
+                    res.redirect('index');
+                }
+            );
+        })
+
+    -Menggunakan redirect 
+        Ada sejumlah situasi dimana proses redirect akan berguna, khusunua seperti saat membuat request
+         menggunakan method POST. Dalam kasus seperti ini, ketimbang menggunakan res.render,
+         Kita mengguanakn redirect dan mengalihkan route get.
+         Untuk POST gunakan redirect
+         sytax menajdi:
+            app.post('/create',(req,res)=>{
+                connection.query(
+                'INSERT INTO items (name) VALUES (?)',
+                [req.body.itemName],
+                (error,results)=>{
+                res.redirect(/index);
+                    );
+                    }
+                );
+             });

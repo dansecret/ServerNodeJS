@@ -77,5 +77,17 @@ connection.query(
     }
   );
 });
+
+//redirect menambahkan item ke database
+app.post('/create',(req,res)=>{
+  connection.query(
+  'INSERT INTO items (name) VALUES (?)',
+  [req.body.itemName],
+  (error,results)=>{
+      res.redirect(/index);
+      );
+      }
+    );
+  });
 //Menyambungkan server menggunakan method listen
 app.listen(3000);
